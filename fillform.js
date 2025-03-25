@@ -252,8 +252,9 @@
                 if (!orig) return;
                 if (orig.type === "checkbox" || orig.type === "radio")
                     field.checked = orig.checked;
-                else
-                    overwrite && (field.value = orig.value);
+                else if (overwrite || !field.value) {
+                    (field.value = orig.value);
+                }
             }
         );
     }
@@ -305,7 +306,9 @@
                     if (field.type === "checkbox" || field.type === "radio") {
                         orig.checked = data[key];
                     } else {
-                        orig.value = data[key];
+                        if (overwrite || !orig.value) {
+                            orig.value = data[key];
+                        }
 
                         if (orig.tagName === 'SELECT') {
                             Array.from(orig.options).forEach(option => {
