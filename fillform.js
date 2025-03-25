@@ -8,12 +8,7 @@
     };
 
     function showNotification(message, type = "success") {
-        const colors = {
-            success: "#4CAF50",
-            error: "#F44336",
-            warning: "#FF9800",
-            info: "#2196F3"
-        };
+        const colors = {success: "#4CAF50", error: "#F44336", warning: "#FF9800", info: "#2196F3"};
         const existing = document.getElementById("form-overlay-notification");
         if (existing) existing.remove();
         const notif = createEl("div", {id: "form-overlay-notification", textContent: message},
@@ -29,17 +24,11 @@
     }
 
     const createOverlay = () => {
-        const overlay = createEl("div", {id: "field-overlay"},
-            "position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.7);z-index:10000;display:flex;flex-direction:column;align-items:center;overflow:hidden"
-        );
-        const headerPanel = createEl("div", {},
-            "background-color:#f8f9fa;width:90%;max-width:800px;padding:5px 10px;border-radius:2px 2px 0 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ddd;box-shadow:0 1px 3px rgba(0,0,0,0.1)"
-        );
+        const overlay = createEl("div", {id: "field-overlay"}, "position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.7);z-index:10000;display:flex;flex-direction:column;align-items:center;overflow:hidden");
+        const headerPanel = createEl("div", {}, "background-color:#f8f9fa;width:90%;max-width:800px;padding:5px 10px;border-radius:2px 2px 0 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ddd;box-shadow:0 1px 3px rgba(0,0,0,0.1)");
         const headerTitle = createEl("div", {}, "display:flex;align-items:center");
         const title = createEl("h2", {textContent: "Form Field Overlay"}, "margin:0;font-size:12px;color:#333");
-        const fieldsCount = createEl("span", {id: "fields-count"},
-            "background:#eee;color:#555;font-size:12px;padding:2px 2px;border-radius:5px;margin-left:5px"
-        );
+        const fieldsCount = createEl("span", {id: "fields-count"}, "background:#eee;color:#555;font-size:12px;padding:2px 2px;border-radius:5px;margin-left:5px");
         headerTitle.append(title, fieldsCount);
         const btnStyle = "color:white;border:none;padding:6px 12px;border-radius:2px;cursor:pointer;font-size:14px;width:auto;height:auto;";
         const buttonContainer = createEl("div", {}, "display:flex;gap:5px");
@@ -63,9 +52,7 @@
         closeButton.onclick = () => document.body.removeChild(overlay);
         buttonContainer.append(loadPageButton, fillPageButton, saveButton, loadButton, closeButton);
         headerPanel.append(headerTitle, buttonContainer);
-        const formContainer = createEl("div", {},
-            "background:white;padding:10px;border-radius:0 0 2px 2px;max-width:800px;width:90%;max-height:calc(90vh - 60px);overflow-y:auto;position:relative"
-        );
+        const formContainer = createEl("div", {}, "background:white;padding:10px;border-radius:0 0 2px 2px;max-width:800px;width:90%;max-height:calc(90vh - 60px);overflow-y:auto;position:relative");
         const form = createEl("form", {id: "overlay-form"});
         formContainer.append(form);
         overlay.append(headerPanel, formContainer);
@@ -76,7 +63,7 @@
         const fields = [];
         document.querySelectorAll("input").forEach(inp => {
             if (!["hidden", "submit", "button", "reset", "image", "file"].includes(inp.type))
-                fields.push(inp);
+                fields.push(inp)
         });
         document.querySelectorAll("textarea, select").forEach(el => fields.push(el));
         return fields;
@@ -301,25 +288,22 @@
                     field.checked = data[key];
                 else
                     field.value = data[key];
-                const orig = document.querySelector(key);
-                if (orig) {
-                    if (field.type === "checkbox" || field.type === "radio") {
-                        orig.checked = data[key];
-                    } else {
-                        if (overwrite || !orig.value) {
-                            orig.value = data[key];
-                        }
-
-                        if (orig.tagName === 'SELECT') {
-                            Array.from(orig.options).forEach(option => {
-                                option.selected = option.value === data[key];
-                            });
-                        }
+                if (field.type === "checkbox" || field.type === "radio") {
+                    field.checked = data[key];
+                } else {
+                    if (overwrite || !field.value) {
+                        field.value = data[key];
                     }
-                    ['input', 'change'].forEach(event => orig.dispatchEvent(new Event(event, {bubbles: true})));
+
+                    if (field.tagName === 'SELECT') {
+                        Array.from(field.options).forEach(option => {
+                            option.selected = option.value === data[key];
+                        });
+                    }
                 }
+                ['input', 'change'].forEach(event => field.dispatchEvent(new Event(event, {bubbles: true})));
             } else {
-                console.warn(`Field not found in saved data: ${key}`);
+                console.warn(`Field ${key} not found in local storage data.`);
             }
         });
         if (count === 0) {
@@ -363,7 +347,7 @@
             fillPageButton.addEventListener("click", () => fillPageFromOverlay(form));
             saveButton.addEventListener("click", () => saveToLocalStorage(form));
         } else {
-            const msg = createEl("p", {textContent: "No editable fields were found on this page."}, "color:#666;font-style:italic;text-align:center;margin:10px 0");
+            const msg = createEl("p", {textContent: "No editable fields were found on this page."}, "color:#666;font-style:italic;text-align:center;margin:10px 0;");
             form.appendChild(msg);
             loadPageButton.disabled = fillPageButton.disabled = saveButton.disabled = loadButton.disabled = true;
         }
@@ -373,13 +357,13 @@
                 document.body.removeChild(overlay);
         });
         overlay.addEventListener("click", e => {
-            if (e.target === overlay) document.body.removeChild(overlay);
+            if (e.target === overlay)
+                document.body.removeChild(overlay)
         });
 
         loadFromLocalStorage(form, false);
         loadValuesFromPage(form, false);
     };
-
     createFieldOverlay();
 })
 ();
