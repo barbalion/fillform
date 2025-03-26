@@ -1,4 +1,5 @@
 # Fill form
+
 A browser utility that creates an overlay to efficiently fill out web forms. It allows you to:
 
 - View and edit all form fields in a single overlay panel
@@ -30,3 +31,8 @@ Add a bookmarklet from the `fillform.url` file to your bookmarks.
     - Save data with "Save to Storage"
     - Load previously saved data with "Load from Storage"
     - Find original fields with the "🔍" button
+3. Press <Enter> to fill the form, save changes and close the overlay.
+
+HINT: This is very simple way of filling the forms: just click bookmarklet and press Enter to
+* Update you saved data from the form
+* Fill the form with saved data

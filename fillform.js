@@ -27,7 +27,7 @@
         const overlay = createEl("div", {id: "field-overlay"}, "position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.7);z-index:10000;display:flex;flex-direction:column;align-items:center;overflow:hidden");
         const headerPanel = createEl("div", {}, "background-color:#f8f9fa;width:90%;max-width:800px;padding:5px 10px;border-radius:2px 2px 0 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ddd;box-shadow:0 1px 3px rgba(0,0,0,0.1)");
         const headerTitle = createEl("div", {}, "display:flex;align-items:center");
-        const title = createEl("h2", {textContent: "Form Field Overlay"}, "margin:0;font-size:12px;color:#333");
+        const title = createEl("h2", {textContent: "Fill Form: press <Enter> to fill and save or use the buttons ==>"}, "margin:0;font-size:12px;color:#333");
         const fieldsCount = createEl("span", {id: "fields-count"}, "background:#eee;color:#555;font-size:12px;padding:2px 2px;border-radius:5px;margin-left:5px");
         headerTitle.append(title, fieldsCount);
         const btnStyle = "color:white;border:none;padding:6px 12px;border-radius:2px;cursor:pointer;font-size:14px;width:auto;height:auto;";
@@ -352,10 +352,19 @@
             loadPageButton.disabled = fillPageButton.disabled = saveButton.disabled = loadButton.disabled = true;
         }
         document.body.appendChild(overlay);
-        document.addEventListener("keydown", e => {
-            if (e.key === "Escape" && document.getElementById("field-overlay"))
+        const listener = e => {
+            if (e.key === "Escape" && document.getElementById("field-overlay")) {
                 document.body.removeChild(overlay);
-        });
+                document.removeEventListener("keydown", listener);
+            }
+            if (e.key === "Enter" && document.getElementById("field-overlay")) {
+                saveToLocalStorage(form);
+                fillPageFromOverlay(form);
+                document.body.removeChild(overlay);
+                document.removeEventListener("keydown", listener);
+            }
+        };
+        document.addEventListener("keydown", listener);
         overlay.addEventListener("click", e => {
             if (e.target === overlay)
                 document.body.removeChild(overlay)
